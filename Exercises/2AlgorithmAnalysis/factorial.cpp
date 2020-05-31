@@ -31,15 +31,15 @@ long fib_iter(int n);
 
 #include <iostream>
 using namespace std;
-//
-//int main(int argc, char *argv[])
-//{
+
+// int main(int argc, char *argv[])
+// {
 //    if (argc < 2)
 //    {
 //        cerr << "Usage:  " << argv[0] << " <n>\n";
 //        return 1;
 //    }
-//
+
 //    char *end;
 //    int n = strtol(argv[1], &end, 10);
 //    if (*end != '\0')
@@ -47,41 +47,41 @@ using namespace std;
 //        cerr << "Invalid value of n: '" << argv[1] << "'\n";
 //        return 1;
 //    }
-//
+
 //    cout << "Recursive: ";
 //    timeFactorialFunction(recursive, n);
-//
+
 //    cout << "Iterative: ";
 //    timeFactorialFunction(iterative, n);
-//
+
 //    cout << "Fibonacci Recursive: ";
 //    timeFibonacciFunction(fib_recur, n);
-//
+
 //    cout << "Fibonacci Iterative: ";
 //    timeFibonacciFunction(fib_iter, n);
-//
-//    return 0;
-//}
 
-//int main()
-//{
-//    for(int i=10; i<21; i++) {
-//        cout << "Factorial Recursive: ";
-//        timeFactorialFunction(recursive, i);
-//
-//        cout << "Factorial Iterative: ";
-//        timeFactorialFunction(iterative, i);
-//
-////        cout << "Fibonacci Recursive: ";
-////        timeFibonacciFunction(fib_recur, i);
-////
-////        cout << "Fibonacci Iterative: ";
-////        timeFibonacciFunction(fib_iter, i);
-//    }
-//
-//    system("pause");//to show "Press any key to continue" in the console
 //    return 0;
-//}
+// }
+
+int main()
+{
+   for(int i=10; i<21; i++) {
+       cout << "Factorial Recursive: ";
+       timeFactorialFunction(recursive, i);
+
+       cout << "Factorial Iterative: ";
+       timeFactorialFunction(iterative, i);
+
+//        cout << "Fibonacci Recursive: ";
+//        timeFibonacciFunction(fib_recur, i);
+//
+//        cout << "Fibonacci Iterative: ";
+//        timeFibonacciFunction(fib_iter, i);
+   }
+
+   system("pause");//to show "Press any key to continue" in the console
+   return 0;
+}
 
 void timeFactorialFunction(std::function<long (int)> f, int n)
 {
