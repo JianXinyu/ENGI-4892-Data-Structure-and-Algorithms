@@ -3,6 +3,14 @@
 #include <list>
 #include <vector>
 
+//overload operator << to print reference of std::unique_ptr
+template <typename T>
+std::ostream& operator << (std::ostream &os, const  std::unique_ptr<T> &uniquePtr)
+{
+    os << *uniquePtr;
+    return os;
+}
+
 template< typename T>
 class LinkedList
 {
@@ -29,7 +37,7 @@ public:
             tail_ = head_.get();
         }
         //operators usually need to return reference to something
-        //returning *this makes cascade usage possible
+        //returning *this can chain cascade usages
         //e.g. someList << 1 << 2 << 3;
         return *this;
     }
@@ -39,9 +47,8 @@ public:
     {
         Node *pnode = head_.get(); //present node
         //keep printing node until the tail_
-
         while(pnode) {
-            std::cout << *pnode->value_ << "-->";
+            std::cout << pnode->value_ << "-->";
             pnode = pnode->next_.get();
         }
         std::cout << "Null \n";
@@ -76,29 +83,25 @@ private:
     Node                            *tail_;
 };
 
-//template <typename T>
-//std::ostream& operator<<(std::ostream &os, const  LinkedList<std::unique_ptr<T>> &list)
-//{
-//
-//}
+
 int main() {
-//    //test integer
-//    LinkedList<int> listInt;
-//    listInt << 1 << 2;
-//    std::cout << "Int Linked List: ";
-//    listInt.display();
-//
-//    //test double
-//    LinkedList<double> listDbl;
-//    listDbl << 1.1 << 2.2;
-//    std::cout << "Double Linked List: ";
-//    listDbl.display();
-//
-//    //test string
-//    LinkedList<std::string> listStr;
-//    listStr << "Alice" << "Bob";
-//    std::cout << "String Linked List: ";
-//    listStr.display();
+    //test integer
+    LinkedList<int> listInt;
+    listInt << 1 << 2;
+    std::cout << "Int Linked List: ";
+    listInt.display();
+
+    //test double
+    LinkedList<double> listDbl;
+    listDbl << 1.1 << 2.2;
+    std::cout << "Double Linked List: ";
+    listDbl.display();
+
+    //test string
+    LinkedList<std::string> listStr;
+    listStr << "Alice" << "Bob";
+    std::cout << "String Linked List: ";
+    listStr.display();
 
     //test non-copyable type
     LinkedList<std::unique_ptr<double>> pointers;
