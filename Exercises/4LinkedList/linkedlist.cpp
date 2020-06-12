@@ -209,15 +209,6 @@ int main() {
     std::cout << "Unique Pointer Linked List: ";
     pointers.display();
 
-//    LinkedList<double> numbers;
-//    numbers << 3.1415 << 2 << 42;
-//
-//    cout << "front of numbers: " << numbers.front() << endl;
-//    cout << "back of numbers: " << numbers.back() << endl;
-//
-//    LinkedList<unique_ptr<double>> pointers;
-//    pointers << make_unique<double>(3.14);
-
    return 0;
 }
 
