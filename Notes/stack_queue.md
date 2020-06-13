@@ -13,6 +13,79 @@ the time to evaluate a postfix expression is $O(N)$，because processing each el
 
 pros of postfix expression: 不需要知道任何先验规则，诸如运算优先级。
 
+下面给出实现:
+
+```C++
+/**
+ * conduct operation
+ * @param a, b: operands
+ * @param oper: operator
+ * @return calculation result
+ * if the operator is wrong, return negative infinity
+ */
+float calculation(float a, float b, char oper)
+{
+    if(oper == '+')
+        return a + b;
+    else if(oper == '-')
+        return a - b;
+    else if(oper == '*')
+        return a * b;
+    else if(oper == '/')
+        return a / b;
+    else if(oper == '^')
+        return std::pow(a, b);
+    else
+        return INT_MIN;
+}
+
+/**
+ * calculate a postfix expression using reverse Polish notation (RPN)
+ * Logic:   find numbers and store in the stack;
+ *          find operand, conduct calculation and store the result
+ * @param iterators
+ * @return calculation result
+ */
+float RPN(const std::vector<std::string> &expr)
+{
+    std::stack<float> numPool;
+    for(const auto& i : expr)
+    {
+        char ch = i[0];
+        //if operand
+        if(ch >= '0' && ch <= '9')
+        {
+            //store the number
+            numPool.push(float(ch - '0'));
+        }
+        //if operator
+        else if(ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '^')
+        {
+            //get and delete the last number
+            float num2 = numPool.top();
+            numPool.pop();
+            //get and delete the second last number
+            float num1 = numPool.top();
+            numPool.pop();
+            //store the result
+            numPool.push(calculation(num1, num2, ch));
+        }
+    }
+
+    return numPool.top();
+}
+
+int main()
+{
+    std::vector<std::string> expr = { "1", "2", "+", "3", "*"};
+    std::cout << R"(Result of { "1", "2", "+", "3", "*" } is: )" << RPN(expr) << '\n';
+    
+    return 0;
+}
+```
+
+
+
 ### Infix to Postfix Conversion
 
 stack不仅可以用来计算后缀表达式(evaluate a **postfix** expression)，也可以用来将中缀(**infix**)表达式转为后缀。
@@ -32,6 +105,8 @@ stack不仅可以用来计算后缀表达式(evaluate a **postfix** expression)�
   3. 如果读到右括号，pop the stack, writing symbols until we encounter a corresponding left parenthesis, which is popped but not output. 如果读到其他symbol，如+、-、(，then we pop entries from the stack until we find an entry of lower priority.  One exception is that we never remove a ( from the stack except when processing a ). For the purposes of this operation, + has lowest priority and **( highest**. When the popping is done, we push the operator onto the stack.
   4. Finally, if we read the end of input, we pop the stack until it is empty, writing symbols
      onto the output.
+  
+  实现参考自[Rosetta Code](https://rosettacode.org/wiki/Parsing/Shunting-yard_algorithm#C.2B.2B)，写的实在是太漂亮了！仅仅做了少许改动，去掉了异常处理（编译器不支持），改了一些表述使其更符合规范。 限于篇幅，请见我的[Github](https://github.com/JianXinyu/ENGI-4892-Data-Structure-and-Algorithms/blob/master/Exercises/5Stack/mathExpression.cpp).
 
 ## Queue
 
