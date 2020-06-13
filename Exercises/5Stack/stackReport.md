@@ -46,59 +46,30 @@ Clearly, the memory address is getting smaller.
        return element of stack top
    ```
 
+   see code at mathExpression.cpp
+
 3. [optional] Use Dijkstra’s stack-based [shunting-yard algorithm](https://en.wikipedia.org/wiki/Shunting-yard_algorithm) to convert an infix mathematical expression (e.g., 1+2×(3+4)1+2×(3+4)) to a postfix/RPN expression (e.g., `3 4 + 2 * 1 +`).
 
 The shunting-yard algorithm is a method for parsing mathematical expressions written in infix notation to Reverse Polish Notation(RPN).
 
-Pseudo code: referred from the [link](https://www.technical-recipes.com/2011/a-mathematical-expression-parser-in-java-and-cpp/#DownloadUpdate)
+The logic is as followings:
 
-```
-For each token
-{
-    If (token is a number)
-    {
-        Add number to the output queue
-    }
-     
-    If (token is an operator eg +,-,*...) 
-    {
-        While (stack not empty AND 
-               stack top element is an operator)
-        {
-            If ((token = left associative AND 
-                 precedence <= stack top element) OR
-            (token = right associative AND 
-                 precedence < stack top element))
-            {
-            Pop stack onto the output queue.  
-                Exit while loop.
-            }
-        }
-        Push token onto stack
-    }
- 
-    If (token is left bracket '(')
-    {
-        Push token on to stack
-    }
- 
-    If (token is right bracket ')')
-    {
-        While (stack not empty AND  
-               stack top element not a left bracket)
-        {
-            Pop the stack onto output queue            
-        }
-        Pop the stack
-    }
-}
- 
-While (stack not empty)
-{
-    Pop stack onto output queue
-}
-```
+1. if read operand, add it into output
+2. if read operator and left parenthesis，put it into a stack
+3. If read right parenthesis, pop the stack, writing symbols until we encounter a corresponding left parenthesis, which is popped but not output. If encounter with other symbol, such as +、-、(，then we pop entries from the stack until we find an entry of lower priority.  One exception is that we never remove a ( from the stack except when processing a ). For the purposes of this operation, + has lowest priority and **( highest**. When the popping is done, we push the operator onto the stack.
+4. Finally, if we read the end of input, we pop the stack until it is empty, writing symbols
+   onto the output.
+
+see code at mathExpression.cpp
 
 
 
- 
+## Exercises for 12 Jun 2018
+
+1. Implement a template queue class using a `std::list` field. Provide `enqueue()`, `dequeue()` and `size()` methods — no iterators required.
+
+   see class Queue at queque.cpp
+
+2. Write a C++ program that accepts user input via `std::cin` and, depending on that input, enqueues and dequeues values of type `int`. For example, you might accept user commands like `enqueue NUMBER` to enqueue a value in your queue and `dequeue` to dequeue a number and print it out. Your program should refuse to dequeue a number when the queue is empty.
+
+   see main() at queque.cpp
