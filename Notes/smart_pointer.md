@@ -1,8 +1,8 @@
-本人愚钝，cplusplus.com的描述及各种问答网站上关于智能指针的回答实在不好理解，幸而发现了这个解释，通俗易懂，总结如下。
+本人愚钝，cplusplus.com的描述及各种问答网站上关于智能指针的回答实在不好理解，幸而发现了这个解释，通俗易懂(并不)，总结如下。
 Referred and Concluded from YouTuber [CppNuts](https://www.youtube.com/watch?v=wUzn0HljjRE&list=PLk6CEY9XxSIAI2K-sxrKzzSyT6UZR5ObP). 
 
 ## Introduction
-Smart pointer is a **class** which wraps a raw pointer, to manage the life time of the pointer. 以下例子可以方便理解，即使不写delete sp, 在执行完main后也会自动调用destructor.
+Smart pointer is a template **class** which wraps a raw pointer, to manage the life time of the pointer. 以下例子可以方便理解，即使不写delete sp, 在执行完main后也会自动调用destructor.
 ```cpp
 #include <iostream>
 
@@ -84,7 +84,7 @@ p3.reset(p4); //由指向Foo(24)变为Foo(42)
 std::unique_ptr<Foo> p6 = std::make_unique<Foo>(24);
 swap(p3, p6); //p3指向Foo(24), p6指向Foo(42)
 ```
-reset()可以理解为两步：第一步删除原来的，第二布定义新的。所以下面的代码可以输出两遍"Foo is destroyed!"。
+reset()可以理解为两步：第一步删除原来的，第二步定义新的。所以下面的代码可以输出两遍"Foo is destroyed!"。
 ```cpp
 int main()
 {
@@ -94,3 +94,66 @@ int main()
     return 0;
 }
 ```
+
+
+## shared_ptr
+- shared_ptr is a smart pointer that retains shared ownership of an object(managed object) through a pointer.  Several shared_ptr can own the same object(managed object). 
+- shared_ptr keeps a **reference count** to maintain how many shared_ptrs are pointing to the same object. Reference count doesn't work when use reference or pointer of shared_ptr. 
+仍然以Foo class为例:
+```cpp
+using namespace std;
+int main()
+{
+    std::shared_ptr<Foo> sp(new Foo(42));
+    
+    cout << sp->get() << endl; //print 42
+    cout << sp.use_count() << endl; //print 1
+    
+    std::shared_ptr<Foo> sp1 = sp;
+    cout << sp1->get() << endl; //print 42
+    cout << sp.use_count() << endl; //print 2
+    cout << sp1.use_count() << endl; //print 2
+    
+    std::shared_ptr<Foo> &sp2 = sp; // using & doesn't increase reference count
+    cout << sp2->get() << endl; //print 42
+    cout << sp.use_count() << endl; //still print 2
+    cout << sp2.use_count() << endl; //print 2
+    
+    return 0;
+}
+//at last, print "Foo is destroyed!" only once, because there is only one managed object.
+```
+- shared_ptr is thread safe and not thread safe:control block is thread safe, managed object is not.
+```cpp
+#include <thread>
+using namespace std;
+
+void fun(std::shared_ptr<Foo> sp){
+    cout << "func " <<  sp.use_count() << endl;
+}
+
+int main()
+{
+    std::shared_ptr<Foo> sp(new Foo(42));
+    cout << "main before " << sp.use_count() << endl;
+    thread t1(fun, sp), t2(fun, sp), t3(fun, sp);
+    cout << "main after " << sp.use_count() << endl;
+    t1.join(); t2.join(); t3.join();
+    
+    return 0;
+}
+```
+输出可能会很混乱
+
+```bash
+main before 1
+main after 4
+func 4
+func 4
+func 2
+Foo is destroyed!
+```
+
+- 三种方法destroy managed object and deallocate its memory:
+	1. the last remaining shared_ptr goes out of scope, i.e. destroyed;
+	2. the last remaining shared_ptr owning the object is assigned another pointer via operator= or reset().
