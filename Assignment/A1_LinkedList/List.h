@@ -22,9 +22,6 @@ class List
 {
 private:
     // Add whatever you need to add here
-    class Node;
-    using NodePtr = std::unique_ptr<Node>;
-
     class Node{
     public:
 //        static NodePtr Create(Node *predecssor = nullptr)
@@ -43,7 +40,7 @@ private:
 
     Node    *head_;
     Node    *tail_;
-    size_t  size_{};
+    size_t  size_;
 
     void init()
     {
@@ -54,11 +51,6 @@ private:
         tail_->prev_ = head_;
     }
 
-    void clear()
-    {
-        while( !empty() )
-            erase( begin() );
-    }
 public:
     //! An iterator over the list
     class iterator
@@ -135,23 +127,24 @@ public:
     List(const List& rhs)
     {
         init();
-        for( auto &x: rhs )
-            push_back( x );
+        for(auto x : rhs )
+            this->push_back( x );
     };
 
     //! Move constructor
-    List(List&& rhs)
-        : size_(rhs.size_), head_(rhs.head_), tail_(rhs.tail_)
+    List(List&& rhs) noexcept
+    : size_(rhs.size_), head_(rhs.head_), tail_(rhs.tail_)
     {
         rhs.size_ = 0;
-        rhs.head_ = nullptr;
         rhs.tail_ = nullptr;
+        rhs.head_ = nullptr;
     };
 
     //! Destructor
     ~List()
     {
-        clear();
+        while( !empty() )
+            {erase( begin() );}
         delete head_;
         delete tail_;
     };
@@ -174,25 +167,24 @@ public:
         return *this;
     };
 
-
     //
     // Accessors:
     //
     //! How many elements are in this list?
     size_t size() const
-        { return size_; };
+        { return size_; }
 
     //! Is this list empty?
     bool empty() const
-        { return size_==0; };
+        { return size_==0; }
 
     //! Get an iterator to the beginning of the list
-    iterator begin()
-        { return {head_->next_}; };
+    iterator begin() const
+        { return iterator(head_->next_); }
 
     //! Get an iterator just past the end of the list
-    iterator end()
-        { return tail_;}
+    iterator end() const
+        { return iterator(tail_);}
 
 
     //
@@ -227,12 +219,12 @@ public:
     iterator insert(iterator itr, const T& object)
     {
         Node *p = itr.current_;
-        Node *newNode = new Node(object, p->pre, p);
+        Node *newNode = new Node(object, p->prev_, p);
         p->prev_->next_ = newNode;
         p->prev_ = newNode;
         size_++;
 
-        return newNode;
+        return iterator(newNode);
     };
 
     /**
@@ -253,7 +245,7 @@ public:
         p->prev_ = newNode;
         size_++;
 
-        return newNode;
+        return iterator(newNode);
     }
 
     //! Remove an element from an arbitrary location
@@ -263,6 +255,7 @@ public:
         p->prev_->next_ = p->next_;
         p->next_->prev_ = p->prev_;
         delete p;
-        size_--;
+        --size_;
     }
+
 };
