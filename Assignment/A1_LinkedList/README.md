@@ -50,3 +50,16 @@ Further details on the semantics of each method are given in the header file [Li
 |      `T& operator*()`      |  Dereference operator   | `*i`  |
 |  `iterator& operator++()`  | Pre-increment operator  | `++i` |
 | `iterator operator++(int)` | Post-increment operator | `i++` |
+
+
+
+struct: a relic from the C, is essentially a class in which the members default to **public**.  Commonly used to signify a type that contains mostly data that are accessed directly, rather than through methods. 
+
+
+
+we don't have to implement rule of 3 in the node, we can do it by using unique_ptr for next_
+
+. So next_ field owns the next code. when this node is deleted, the next node is deleted. same with the head_. 
+
+Why can't have next_ and prev_ both unique_ptr? because they'll try to own the same node.
+
