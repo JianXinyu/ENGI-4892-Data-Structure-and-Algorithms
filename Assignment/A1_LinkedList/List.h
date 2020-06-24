@@ -115,7 +115,6 @@ public:
         bool operator!= (const iterator& rhs) const
         {
             return current_ != rhs.current_;
-//            return !(*this == rhs);
         };
     };
 
@@ -132,12 +131,17 @@ public:
     };
 
     //! Move constructor
-    List(List&& rhs) noexcept
+
+    List(List&& rhs)
     : size_(rhs.size_), head_(rhs.head_), tail_(rhs.tail_)
     {
         rhs.size_ = 0;
-        rhs.tail_ = nullptr;
-        rhs.head_ = nullptr;
+        rhs.head_ = new Node;
+// why using the following instead the above can't pass the
+// move construction test, raising segmentation fault? Using
+// above, I got error on my compiler, whit exit code -1073740940 (0xC0000374)
+//        rhs.head_ = nullptr;
+//        rhs.tail_ = nullptr;
     };
 
     //! Destructor
