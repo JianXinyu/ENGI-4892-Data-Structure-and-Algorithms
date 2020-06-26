@@ -1,3 +1,5 @@
+
+
 ## Exercises for 17 Jun 2020
 
 1. Discuss the merits of using `std::shared_ptr` vs `std::unique_ptr` to manage the ownership of child nodes in a tree.
@@ -40,3 +42,42 @@ Consider the alternate child-and-sibling structure [described here](https://memo
 2. Re-implement your tree data structure to use the child-and-sibling node structure.
 
    All changes are in Node class. the addChild method is changed. a new method named addSibling is added.  Two field: child_ and sibling_ are added.
+
+## Exercises for 25 Jun 2020
+
+1. Implement pre- and post-order traversal in your tree data structure, passing an instantiation of the following function template to your traversal method (i.e., your test code should call something like `myTree.visitPreorder(visit<double>)`):
+
+   ```C++
+   template<typename T>
+   void visit(const T &value)
+   {
+   	static size_t i = 0;
+   	std::cout << "Node " << i++ << ": " << value << "\n";
+   }
+   ```
+
+   pseudocode:
+
+   ```python
+   def visit_preorder(node, fn):
+   	if node is None:
+   		return
+   	
+   	fn(node)
+   	for child in children:
+   		visit_preorder(child, fn)
+   
+   def visit_postorder(node, fn):
+   	if node is None:
+   		return
+   	
+   	for child in children:
+   		visit_preorder(child, fn)    
+       fn(node)
+   ```
+
+   
+
+2. [optional] Implement level-order traversal for your tree data structure. You may find the [queue-based algorithm described on Wikipedia’s "Tree Traversal" page](https://en.wikipedia.org/wiki/Tree_traversal#Breadth-first_search_2) to be helpful.
+
+   skip
