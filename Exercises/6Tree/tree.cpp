@@ -4,6 +4,7 @@
 #include <memory>
 #include <functional>
 
+#include "binaryTree.h"
 template <typename T>
 class Tree
 {
@@ -151,6 +152,7 @@ void visit(const T &value)
 }
 
 
+
 int main() {
 
     Tree<std::string> tree;
@@ -182,6 +184,16 @@ int main() {
 
     std::cout << "Post-order: \n";
     tree.visitPostorder(visit<std::string>);
+    
+    BinaryTree<int> btree;
+    btree << 1 << 2 <<3;
+
+    // Pre: 1 2 3
+    // Post: 2 3 1
+    // In: 2 1 3
+    btree.traverse(TreeTraversalOrder::PostOrder,
+            [](const int &n) {std::cout << n << std::endl;});
+    
     return 0;
 }
 
