@@ -81,3 +81,17 @@ Consider the alternate child-and-sibling structure [described here](https://memo
 2. [optional] Implement level-order traversal for your tree data structure. You may find the [queue-based algorithm described on Wikipedia’s "Tree Traversal" page](https://en.wikipedia.org/wiki/Tree_traversal#Breadth-first_search_2) to be helpful.
 
    skip
+
+## Exercises for 3 Jul 2020
+
+Given the partial `BinarySearchTree` class template in [BST.h](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/trees/exercises/BST.h), the stub test code in [bst-test.cc](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/trees/exercises/bst-test.cc) and the provided [Makefile](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/trees/exercises/Makefile):
+
+1. Implement the `insert`, `Node::min` and `Node::max` methods recursively.
+
+   see code in BST.h
+
+2. Implement the `BinarySearchTree::print` method using a recursive `Node::print` method.
+
+   see code in BST.h
+
+3. [optional] Instantiate a binary search tree to contain more interesting objects (e.g., transcript objects that contain vectors of course result objects) and with a non-trivial comparison function (e.g., one that compares the mark in a specific course between two transcripts). Change the "keep a count of duplicates" approach in the given `Node` to instead keep a linked list of "duplicates" (which may not be entirely identical, merely identical in one course).
