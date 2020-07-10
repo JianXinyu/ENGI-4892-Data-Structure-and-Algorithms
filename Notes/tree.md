@@ -10,8 +10,6 @@ The height of a tree, or the depth of the tree, is the height of its root.
 
 # BINARY SEARCH TREES
 
-## BINARY SEARCH TREES
-
 ### Binary tree
 
 Binary tree is a specialization of the general tree concept. It's node has 0, 1 or 2 children.
@@ -65,4 +63,4 @@ else go right
 ```
 
 4. **Removal**
-   1. find the node
+   1. find the node by recursive descent
