@@ -133,10 +133,22 @@ Using the [VisuAlgo BST visualizer](https://visualgo.net/en/bst), construct the 
 **For extra challenge**, plan all of the nodes that you need to insert and the order in which they should be inserted **before** adding any nodes; then add them all at once as a comma-separated list.
 
 1. Degenerate trees:
+
    1. A linked list of eight nodes, in which each node is found to the left of its parent.
+
+      ![image-20200710001717873](.\image-20200710001717873.png)
+
    2. A linked list of six nodes that "zig-zags", i.e., to get from the root to the (only) leaf, you follow the root’s `left` pointer, then that node’s `right` pointer, then `left`, etc.
+
+      ![image-20200710002150056](.\image-20200710002150056.png)
+
 2. A tree that stores all of your final course marks as they appear on your transcript, added **in chronologial order**.
+
+   ![image-20200710002537475](.\image-20200710002537475.png)
+
 3. A tree that stores all of your final course marks as they appear on your transcript, added in an order that will make the tree **approximately balanced**.
+
+   ![image-20200710002619663](.\image-20200710002619663.png)
 
 ### GraphViz
 
@@ -203,7 +215,16 @@ Of course, if you want to get *really* fancy, you can output DOT like [this](htt
 ## Exercises for 10 Jul 2020
 
 1. Implement a method to rotate a subtree, either to the left or to the right. Use your previously-implemented GraphViz DOT output to test it. What is its algorithmic complexity?
+
+   see BST.h method rotate().
+
+   the algorithmic complexity is O(1).
+
 2. Create a subclass of the `BinarySearchTree` class that implements AVL rebalancing when you perform a left-left or a right-right insertion that puts a subtree out of balance. What is the algorithmic complexity of this new `insert` method?
+
+   see BST.h class AVL.
+
+   time complexity still is $log_2 n$.
 
 [
   ](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/trees/avl/)

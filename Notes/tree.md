@@ -64,3 +64,77 @@ else go right
 
 4. **Removal**
    1. find the node by recursive descent
+
+
+
+### Adelson–Velsky–Landis (AVL) tree
+
+a binary search tree that keeps itself balanced when you add or remove nodes. **Self-balanced**
+
+Problem: BST works well when it is balanced, $O(log_2 n)$. adding or removing nodes will cause BST loses its balance. Worst case: degenerate into a linked list, $O(n)$.
+
+Solution:  add one more constraint to keep the tree self-balanced.
+
+- binary
+
+   - each node's left subtree and right subtree are partitioned by the node's value
+
+   - **New**: every node's height can differ in height by no more than one
+
+     ​			Each node's balance factor: the difference between the heights of the node's two subtrees
+
+     ![image-20200711091052011](.\figures\avl)
+
+#### Single Rotation
+
+​	--- newly-inserted nodes are ***outer*** nodes, since they appear on the outside edge of a subtree.
+
+		- add a node to the left of the left subtree of a node
+		- add a node to the right of the right subtree of a node
+
+**Without child**
+
+![image-20200711091430456](.\figures\image-20200711091430456.png)
+
+1. decide which of 17's subtrees has the greater value. In this case, the left subtrees
+
+2. take the left subtree and make it the root of the subtree that used to be rooted at 17
+
+3. make the old root of the subtree, i.e., 17, the right child of the new subtree root, i.e., 8
+
+   ![image-20200711092231893](.\figures\image-20200711092231893.png)
+
+**With child**
+
+Insert 2 to the tree
+
+![image-20200711093804127](.\figures\image-20200711093804127.png)
+
+the new subtree root (4) *already has* a child node on its right: the 5 node.
+
+![image-20200711095833215](.\figures\image-20200711095833215.png)
+
+the right child(5) of the new subtree root(4) becomes the left subchild of the old subtree root(6)
+
+
+
+#### Double rotation
+
+Insert an ***inner*** node, that is, the right child of a left node or the left child of a right node
+
+![image-20200711110113460](.\figures\image-20200711110113460.png)
+
+1. arrange for the subtree to be too deep in an outer node rather than an inner one through rotation.
+
+   in this case, left rotation
+
+   ![image-20200711110207139](.\figures\image-20200711110207139.png)
+
+2. rotate. in this case, right rotation
+
+   ![image-20200711110421013](.\figures\image-20200711110421013.png)
+
+
+
+the **complexity** of performing this double-rebalancing in terms of the number of nodes in the tree:
+
