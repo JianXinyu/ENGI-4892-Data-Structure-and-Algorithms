@@ -8,6 +8,11 @@ The height of a tree, or the depth of the tree, is the height of its root.
 
 **Balanced**: if the heights of each node's subtrees are equal, or at least close, we call  the tree balanced.  A balanced tree has **logarithmic height**: the length of the path from the root to any node in the tree is $O(log n)$.
 
+#### Traversal
+
+- Preorder: work at a node is performed before (pre) its children are processed.
+- Postorder: work at a node is performed after (post) its children are evaluated.
+
 # BINARY SEARCH TREES
 
 ### Binary tree
