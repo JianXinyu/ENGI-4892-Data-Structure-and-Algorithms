@@ -32,11 +32,9 @@ class BinarySearchTree
 private:
     struct Node
     {
-        Node(T value) : element_(std::move(value))
+        Node(T &&value) : element_(std::move(value))
         {
         }
-        Node()
-        {}
         void dot(std::ostream &o) const
         {
             // NOTE: this is slightly more complicated than strictly
@@ -72,8 +70,8 @@ private:
         }
 
         T element_;
-        std::shared_ptr<Node> left_;
-        std::shared_ptr<Node> right_;
+        std::shared_ptr<Node> left_ = nullptr;
+        std::shared_ptr<Node> right_ = nullptr;
     };
 
     /**
@@ -87,7 +85,8 @@ private:
     {
         if (not node)
         {
-            node = std::make_shared<Node>(std::move(value));
+//            node = std::make_shared<Node>(std::move(value));
+            node.reset(new Node(std::move(value)));
         }
         else if (compare_(value, node->element_))
         {
@@ -104,8 +103,14 @@ private:
     }
 
     Comparator compare_;
-    std::shared_ptr<Node> root_;
+    std::shared_ptr<Node> sentinel_; //sentinel for end node
+    std::shared_ptr<Node> root_= nullptr;
+
 public:
+
+    BinarySearchTree() {
+    }
+
     enum class Traversal
     {
         PreOrder,
@@ -149,48 +154,49 @@ public:
     public:
         // add whatever else you need here
         // Constructor
-        explicit Iterator(std::shared_ptr<Node> node, Traversal type)
+        Iterator(std::shared_ptr<Node> node, Traversal type)
         {
             current_ = node;
             type_ = type;
-            switch(type_)
+            if(current_)
             {
-                case Traversal::PreOrder:
+                switch(type_)
                 {
-                    // push right and left children of the popped node to stack
-                    // Note: we push right first because we want to print left node first
-                    if(current_->right_)
+                    case Traversal::PreOrder:
                     {
-                        parents_.push(current_->right_);
+                        // push right and left children of the popped node to stack
+                        // Note: we push right first because we want to print left node first
+                        if(current_->right_)
+                        {
+                            parents_.push(current_->right_);
+                        }
+                        if(current_->left_)
+                        {
+                            parents_.push(current_->left_);
+                        }
+                        break;
                     }
-                    if(current_->left_)
+                    case Traversal::InOrder:
                     {
-                        parents_.push(current_->left_);
+                        // store all the left nodes into stack
+                        while(current_->left_)
+                        {
+                            parents_.push(current_);
+                            current_ = current_->left_;
+                        }
+                        break;
                     }
-                    break;
-                }
-                case Traversal::InOrder:
-                {
-                    // store all the left nodes into stack
-                    while(current_->left_)
-                    {
-                        parents_.push(current_);
-                        current_ = current_->left_;
-                    }
-                    break;
-                }
 
-                case Traversal::PostOrder:
-                {
-                    // find the first node, i.e. left-most node
-                    post_helper_func();
-                    break;
+                    case Traversal::PostOrder:
+                    {
+                        // find the first node, i.e. left-most node
+                        post_helper_func();
+                        break;
+                    }
                 }
             }
+
         };
-        Iterator()
-        {
-        }
 
         /**
          * Move to the next node in the tree that should be accessed.
@@ -200,6 +206,10 @@ public:
          */
         const Iterator operator ++ (int)
         {
+            if(current_ == end_)
+            {
+                return *this;
+            }
             if(type_ == Traversal::PreOrder)
             {
                 // if there are nodes in stack
@@ -304,6 +314,11 @@ public:
             return current_ != other.current_;
         };
 
+        Iterator takeEnd()
+        {
+            current_ = end_;
+            return *this;
+        }
     private:
         // referred from https://www.geeksforgeeks.org/iterative-postorder-traversal-set-3/
         void post_helper_func()
@@ -329,7 +344,8 @@ public:
                 poststack_.pop();
             }
         }
-        std::shared_ptr<Node> current_;
+        std::shared_ptr<Node> current_ = nullptr;
+        std::shared_ptr<Node> end_ = nullptr;
         std::stack<std::shared_ptr<Node>> parents_;
         std::stack< std::pair< std::shared_ptr<Node>, NodeType> > poststack_; // especially for post order
         NodeType ntype_ = NodeType::left; // especially for post order
@@ -344,7 +360,8 @@ public:
      */
     Iterator begin(Traversal type)
     {
-        return Iterator(root_, type);
+        Iterator beginIter(root_, type);
+        return beginIter;
     };
 
     /**
@@ -356,8 +373,9 @@ public:
      */
     Iterator end()
     {
-        Iterator end;
-        return end;
+        Iterator endIter(root_, Traversal::PreOrder);
+        endIter.takeEnd();
+        return endIter;
     };
 
 
