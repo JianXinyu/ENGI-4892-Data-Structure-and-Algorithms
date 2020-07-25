@@ -48,3 +48,9 @@ Given the following table of road distances between selected locations on the Av
 
 1. Using the algorithm in [the Shortest Paths video](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/shortest-paths/intro/) and the data from Friday’s exercises, calculate (by hand) the distances from Portugal Cove to all other locations in the table.
 2. Starting from the code you wrote on Friday, write a method of your graph class that will calculate the total road distance between any two points in the graph.
+
+## Exercises for 24 Jul 2020 ([Unweighted graphs](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/shortest-paths/unweighted/))
+
+1. Write out and analyze the asymptotic run-time complexity of the algorithm we saw for computing shortest paths through graphs with **unweighted edges** in [our introductory video on the topic](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/shortest-paths/), ([ also presented here](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/shortest-paths/unweighted/naive/)), as well as [the version that uses a *work list* to store "non-done" vertices](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/shortest-paths/unweighted/worklist/). If necessary, you may find it helpful to refer back to [the analyses we did in class on Wednesday](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/shortest-paths/intro/#_analysis).
+2. Write a (template) function to calculate the shortest paths through an unweighted graph.
+
