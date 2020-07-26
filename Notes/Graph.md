@@ -64,7 +64,7 @@ How to represent graph using adjacency list?
 
 - for whole:
   - map: keys are vertices and values are adjacency list. Simpler
-  -  class: maintain each adjacency list as a data member of a Vertex class. Faster
+  - class: maintain each adjacency list as a data member of a Vertex class. Faster
 
 # 2. Topological Sort
 

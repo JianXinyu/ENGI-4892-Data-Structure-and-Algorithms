@@ -24,7 +24,11 @@
    };
    ```
 
+   see "graph.h"
+
 4. [optional] Implement the above using an adjacency list instead of an adjacency matrix.
+
+   see "graph.h"
 
 ## Exercises for 17 Jul 2020
 
@@ -43,10 +47,19 @@ Given the following table of road distances between selected locations on the Av
 1. Write a program that will parse [road-distances.csv](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/exercises/road-distances.csv) into a graph representation. You may use either an adjacency matrix or an adjacency list to store this data in memory.
 
    ***Note:** if you’re not familiar with the CSV (comma-separated value) format, the [Wikipedia article](https://en.wikipedia.org/wiki/Comma-separated_values#Example) is a good place to start. You can ignore any of the complexities about quoting, as our CSV file doesn’t use quotes.*
+   
+   Adjacency list is used in the graph class. For parse code, please see "parse_csv.h". Note that the input csv file needs to be put in the same directory with .exe
+   
+   The output is shown as follows.
+   
+   ![image-20200725231716404](.\image-20200725231716404.png)
 
 ## Exercises for 20 Jul 2020 ([Shortest Paths](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/shortest-paths/intro/))
 
 1. Using the algorithm in [the Shortest Paths video](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/shortest-paths/intro/) and the data from Friday’s exercises, calculate (by hand) the distances from Portugal Cove to all other locations in the table.
+
+   
+
 2. Starting from the code you wrote on Friday, write a method of your graph class that will calculate the total road distance between any two points in the graph.
 
 ## Exercises for 24 Jul 2020 ([Unweighted graphs](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/shortest-paths/unweighted/))
