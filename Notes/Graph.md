@@ -68,14 +68,86 @@ How to represent graph using adjacency list?
 
 # 2. Topological Sort
 
-an ordering of vertices in a DAG, such that if there is a path from $v_i$ to $v_j$, then $v_j$ appears after $v_i$ in the ordering. It contains all vertices. Perhaps there is no path between two vertices, it's OK as long as they fulfill the ordering requirement to other vertices. Thus, it makes the topological sort not unique. $or example, in the following DAG, v1, v2, v5, v4, v3, v7, v6 and v1, v2, v5, v4, v7, v3, v6 are both topological orderings.
+an ordering of vertices in a DAG, such that if there is a path from $v_i$ to $v_j$, then $v_j$ appears after $v_i$ in the ordering. It contains all vertices. Perhaps there is no path between two vertices, it's OK as long as they fulfill the ordering requirement to other vertices. Thus, it makes the topological sort not unique. or example, in the following DAG, v1, v2, v5, v4, v3, v7, v6 and v1, v2, v5, v4, v7, v3, v6 are both topological orderings.
 
 ![image-20200724221551375](.\figures\DAG)
 
 # 3. Shortest-Path Algorithms
+
+Using some vertex, s, which is an input parameter, we would like to find the shortest path from s to all other vertices.
 
 **weighted path length**: The input is a weighted graph: Associated with each edge $(v_i, v_j)$ is a cost $c_{i,j}$ to traverse the edge. The cost of a path $v_1v_2 . . . v_N$ is $\sum_{i=1}^{N−1} c_{i,i+1}$.
 
 **unweighted path length**: the numbers of edges on the path, namely, N-1.
 
 ## 3.1 Unweighted Shortest Paths 
+
+We are only interested in the number of edges contained on the path, which is a special case of the weighted shortest-path problem.
+
+1. **breadth-first search**: It operates by processing vertices in layers: The vertices closest to the start are evaluated first, and the most distant vertices are evaluated last. This is much the same as a level-order traversal for trees.
+
+```pseudocode
+# Set up table of distances and paths
+for v in Vertices
+    distance[v] = ∞
+    done[v] = False
+
+# The distance from the source vertex (s) to itself is 0
+distance[source] = 0
+
+# Iterative algorithm (uses "dynamic programming"):
+for dist in [0, |V|):
+    for v in Vertices:
+        if done[v] or distance[v] != dist:
+            continue
+
+        for each n in adjacencies[v]:
+            if distance[n] == ∞:
+                distance[n] = dist + 1
+                path[n] = v
+
+        done[v] = True
+```
+
+
+
+
+
+## 3.2 Dijkstra's Algorithm
+
+```pseudocode
+# Set up table of distances and paths
+for v in Vertices
+    v.dist = ∞
+    v.done = F
+
+# The distance from the source vertex (s) to itself is 0
+s.dist = 0
+
+# Iterative algorithm:
+while |vertices with done=F| > 0
+    # Pick a vertext to work on:
+    v = smallest-distance vertex with done=F
+
+    # Consider each edge:
+    for each e in v.edges
+        # Pick a vertex from our {list, BST, heap...}
+        neighbour = other vertex of e
+
+        # Have we already finished exploring the neighbour vertex?
+        if ¬neighbour.done
+            # How long is the path through v to this neighbour?
+            distance through v = v.distance + e.distance
+
+            # Is the path through v better than what we have now?
+            if neighbour.distance > distance through v
+                # Set neighbour.distance and (possibly) update the
+                # data structure holding not-yet-done vertices
+                update neighbour.distance to distance through v
+
+                # The new shortest path to neighbour goes through v
+                neighbour.path = v
+```
+
+
+
