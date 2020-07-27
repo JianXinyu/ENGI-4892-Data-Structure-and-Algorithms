@@ -3,7 +3,8 @@
 #include <vector>
 #include <limits>
 #include <iostream>
-#include <iomanip> //std::setw
+#include <iomanip> // std::setw
+#include <algorithm> // std::min_element
 
 //! Exercises for 15 Jul 2020 Adjacency Matrix
 /*
@@ -86,7 +87,8 @@ private:
 */
 
 //! Exercises for 15 Jul 2020 Adjacency List
-//! Exercises for 20 Jul 2020 [Shortest Paths]
+//! Exercises for 20 Jul 2020 Shortest Paths
+//! Exercises for 24 Jul 2020 Unweighted graphs
 template <typename V, typename E>
 class Graph
 {
@@ -126,6 +128,51 @@ public:
     }
 
     /**
+     * weighted shortest path
+     * calculate via Dijkstra's algorithm
+     * @param source vertex
+     * @return a vector contains the shortest distance from a source vertex
+     *          to all other vertices.
+     */
+    std::vector<E> Dijkstra(VertexID source)
+    {
+        const size_t N = vertices_.size();
+        const E INF = std::numeric_limits<E>::max();
+        std::vector<E> distances(N, INF);
+        std::vector<VertexID> path(N);
+        std::vector<bool> done(N, false);
+
+        //The distance from the source vertex (s) to itself is 0
+        distances[source] = 0;
+
+        // while there is a vertex remains not done
+        while (std::count(done.begin(), done.end(), false))
+        {
+            // find the vertex that is not done with the smallest distance
+            VertexID v = minDistance(distances, done);
+
+            // for each vertex w adjacent to v
+            for (VertexID w : neighbours(v))
+            {
+                if(!done[w])
+                {
+                    E cvw = costv2w(v, w); // cost of edge from v to w
+
+                    if(distances[w] > distances[v] + cvw)
+                    {
+                        distances[w] = distances[v] + cvw;
+                        path[w] = v;
+                    }
+                }
+            }
+            done[v] = true;
+        }
+
+        return distances;
+    }
+
+    /**
+     * unweighted shortest path
      * Calculate the shortest distances from a source vertex to
      * all other vertices.
      *
@@ -166,25 +213,65 @@ public:
 
         return distances;
     }
-
+    
+private:
+  /**
+   * find all vertices adjacent to a vertex v
+   * @param v
+   * @return a vector contains the vertices adjacent to v
+   */
     std::vector<VertexID> neighbours(VertexID v)
     {
-         std::vector<VertexID> neighbours;
+        std::vector<VertexID> neighbours;
 
-         for (const Edge &e : edges_)
-         {
-             if (e.from == v)
-             {
-                 neighbours.push_back(e.to);
-             }
-             else if (e.to == v)
-             {
-                 neighbours.push_back(e.from);
-             }
-         }
-         return neighbours;
+        for (const Edge &e : edges_)
+        {
+            if (e.from == v)
+            {
+                neighbours.push_back(e.to);
+            }
+//             else if (e.to == v)
+//             {
+//                 neighbours.push_back(e.from);
+//             }
+        }
+        return neighbours;
     };
-private:
+
+    /**
+     * A helper function to return the weight from vertex v to vertex w
+     */
+    E costv2w(VertexID v, VertexID w)
+    {
+        E weight = 0;
+        for(Edge &edge : edges_)
+        {
+            if(edge.from == v and edge.to == w)
+                weight = edge.data;
+        }
+        return weight;
+    }
+
+    /**
+     * A helper function to find the vertex that is not done with minimum distance
+     * @param distances
+     * @param done
+     * @return vertex id
+     */
+    VertexID minDistance(std::vector<E> distances, std::vector<bool> done)
+    {
+
+        VertexID idx;
+        // Initialize min value
+        E min = std::numeric_limits<E>::max();
+
+        for (VertexID w = 0; w < distances.size(); w++)
+            if (done[w] == false && distances[w] <= min)
+                min = distances[w], idx = w;
+
+        return idx;
+    }
+
     struct Vertex
     {
         VertexID    id;

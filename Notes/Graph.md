@@ -60,7 +60,7 @@ How to represent graph using adjacency list?
 
  - for list: 
    	- vectors: for sparse graph, each vector needs to be initialized with a smaller capacity than the default; otherwise, there could be significant wasted space.
-   	- lists
+      	- lists
 
 - for whole:
   - map: keys are vertices and values are adjacency list. Simpler
@@ -115,38 +115,32 @@ for dist in [0, |V|):
 
 ## 3.2 Dijkstra's Algorithm
 
+a prime example of a greedy algorithm.
+
+Dijkstra’s algorithm proceeds in stages. At each stage, Dijkstra’s algorithm selects a vertex, $v$, which has the smallest $d_v$ among all the *unknown* vertices and declares that the shortest path from $s$ to $v$ is known. The remainder of a stage consists of updating the values of $d_w$.
+
 ```pseudocode
-# Set up table of distances and paths
-for v in Vertices
-    v.dist = ∞
-    v.done = F
+for each v in Vertices
+    v.distance = ∞
+    v.done = False
 
 # The distance from the source vertex (s) to itself is 0
-s.dist = 0
+source.dist = 0
 
 # Iterative algorithm:
-while |vertices with done=F| > 0
-    # Pick a vertext to work on:
-    v = smallest-distance vertex with done=F
-
-    # Consider each edge:
-    for each e in v.edges
-        # Pick a vertex from our {list, BST, heap...}
-        neighbour = other vertex of e
-
-        # Have we already finished exploring the neighbour vertex?
-        if ¬neighbour.done
-            # How long is the path through v to this neighbour?
-            distance through v = v.distance + e.distance
-
-            # Is the path through v better than what we have now?
-            if neighbour.distance > distance through v
-                # Set neighbour.distance and (possibly) update the
-                # data structure holding not-yet-done vertices
-                update neighbour.distance to distance through v
-
-                # The new shortest path to neighbour goes through v
-                neighbour.path = v
+while some vertices remain not done:
+    # Pick a vertex to work on:
+    v = vertex that is not done with smallest distance
+	
+	for each edge in v.edges:
+		cost = edge.cost
+		n = edge.neighbour
+	
+		if n.distance < v.distance + cost
+			n.distance = v.distance + cost
+			n.path = v
+	
+	v.done = True
 ```
 
 
