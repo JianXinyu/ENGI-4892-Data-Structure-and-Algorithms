@@ -58,12 +58,64 @@ Given the following table of road distances between selected locations on the Av
 
 1. Using the algorithm in [the Shortest Paths video](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/shortest-paths/intro/) and the data from Friday’s exercises, calculate (by hand) the distances from Portugal Cove to all other locations in the table.
 
+   Dijkstra's algorithm pseudo code:
+
+   ```pseudocode
+   for each v in Vertices
+   {
+       v.distance = ∞
+       v.done = False
+   }
    
+   # The distance from the source vertex (s) to itself is 0
+   source.dist = 0
+   
+   # Iterative algorithm:
+   while(there is a vertex remains not done)
+   {
+       # Pick a vertex to work on:
+       v = vertex that is not done with the smallest distance
+   	
+   	for each vertex w adjacent to v
+   	{
+       	if(!w.done)
+       	{
+       	    cvw = cost of edge from v to w
+       		if(w.distance > v.distance + cvw)
+       		{
+       		    w.distance = v.distance + cvw
+                   w.path = v
+       		}
+       	}
+   	}
+   	v.done = True
+   }
+   ```
+
+   |               | BAY BULLS | CBS  | GOULDS | HOLYROOD | PARADISE | PORTUGAL COVE | ST. JOHN’S |
+   | :-----------: | :-------: | :--: | :----: | :------: | :------: | :-----------: | :--------: |
+   | Portugal Cove |   43.8    | 16.4 |  28.5  |   40.5   |   12.5   |       0       |    14.2    |
 
 2. Starting from the code you wrote on Friday, write a method of your graph class that will calculate the total road distance between any two points in the graph.
+
+   see method Dijkstra() in graph.h
+
+   The result is the same with calculation above.
+
+   ![image-20200726213329278](.\image-20200726213329278.png)
 
 ## Exercises for 24 Jul 2020 ([Unweighted graphs](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/shortest-paths/unweighted/))
 
 1. Write out and analyze the asymptotic run-time complexity of the algorithm we saw for computing shortest paths through graphs with **unweighted edges** in [our introductory video on the topic](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/shortest-paths/), ([ also presented here](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/shortest-paths/unweighted/naive/)), as well as [the version that uses a *work list* to store "non-done" vertices](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/shortest-paths/unweighted/worklist/). If necessary, you may find it helpful to refer back to [the analyses we did in class on Wednesday](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/shortest-paths/intro/#_analysis).
+
+   for naive algorithm, the time asymptotic run-time complexity is $\Theta(|V|^2)$.
+
+   ![unnamed (1)](.\unnamed (1).jpg)
+
+   for work list algorithm, the time asymptotic run-time complexity is $\Theta(|E|+|V|)$.
+
+   ![unnamed (2)](.\unnamed (2).jpg)
+
 2. Write a (template) function to calculate the shortest paths through an unweighted graph.
 
+   see method shortestDistances() in graph.h

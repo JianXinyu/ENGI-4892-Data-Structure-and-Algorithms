@@ -16,8 +16,8 @@
 
   ​	For directed graph:
 
-  	- **in-degree** of a vertex $v$: the number of edges $(u,v)$ pointing **to** the vertex $v$
-  	- **out-degree**: the number of edges pointing **away** from the vertex
+  - **in-degree** of a vertex $v$: the number of edges $(u,v)$ pointing **to** the vertex $v$
+  - **out-degree**: the number of edges pointing **away** from the vertex
 
 Connection:
 
@@ -68,7 +68,7 @@ How to represent graph using adjacency list?
 
 # 2. Topological Sort
 
-an ordering of vertices in a DAG, such that if there is a path from $v_i$ to $v_j$, then $v_j$ appears after $v_i$ in the ordering. It contains all vertices. Perhaps there is no path between two vertices, it's OK as long as they fulfill the ordering requirement to other vertices. Thus, it makes the topological sort not unique. or example, in the following DAG, v1, v2, v5, v4, v3, v7, v6 and v1, v2, v5, v4, v7, v3, v6 are both topological orderings.
+an ordering of vertices in a DAG, such that if there is a path from $v_i$ to $v_j$, then $v_j$ appears after $v_i$ in the ordering. It contains all vertices. Perhaps there is no path between two vertices, it's OK as long as they fulfill the ordering requirement to other vertices. Thus, it makes the topological sort not unique. or example, in the following DAG, v1, v2, v5, v4, v3, v7, v6 and v1, v2, v5, v4, v7, v3, v6 are both topological orderings. Although there is no path from v3 to v7.
 
 ![image-20200724221551375](.\figures\DAG)
 
@@ -88,16 +88,16 @@ We are only interested in the number of edges contained on the path, which is a 
 
 ```pseudocode
 # Set up table of distances and paths
-for v in Vertices
+for v in V
     distance[v] = ∞
-    done[v] = False
+    done[v] = F
 
 # The distance from the source vertex (s) to itself is 0
 distance[source] = 0
 
 # Iterative algorithm (uses "dynamic programming"):
 for dist in [0, |V|):
-    for v in Vertices:
+    for each v in vertices:
         if done[v] or distance[v] != dist:
             continue
 
@@ -106,42 +106,82 @@ for dist in [0, |V|):
                 distance[n] = dist + 1
                 path[n] = v
 
-        done[v] = True
+        done[v] = T
 ```
 
+the asymptotic run-time complexity: $\Theta(|V|^2)$
 
+![unnamed (1)](.\figures\unnamed (1).jpg)
 
+2. Here’s an improved algorithm that uses a *work list* to store the vertices that still need to be examined. We can store the remaining vertices in an ordered sequence like a queue because they will be **added in the same order they need to be examined in**. When examining a vertex at distance 0, we will find all of the vertices at distance 1 and add them to the work queue. Then we’ll start examining vertices with distance 1, discovering vertices at distance 2 and adding them **to the back** of the queue. This ensures that we’ll only start examining vertices of distance 2 once we get through all of the vertices with distance 1.
 
+```pseudocode
+for v in V
+    distance[v] = ∞
+
+distance[source] = 0
+q.enqueue(source)
+
+while q is not empty:
+    v = q.dequeue()
+
+    for each n in adjacencies[v]:
+        if distance[n] == ∞:
+            distance[n] = dist + 1
+            path[n] = v
+            q.enqueue(n)
+```
+
+the asymptotic run-time complexity:$\Theta(|E|+|V|)$
+
+![unnamed (2)](.\figures\unnamed (2).jpg)
 
 ## 3.2 Dijkstra's Algorithm
 
 a prime example of a greedy algorithm.
 
-Dijkstra’s algorithm proceeds in stages. At each stage, Dijkstra’s algorithm selects a vertex, $v$, which has the smallest $d_v$ among all the *unknown* vertices and declares that the shortest path from $s$ to $v$ is known. The remainder of a stage consists of updating the values of $d_w$.
+Dijkstra’s algorithm proceeds in stages: At each stage, 
+
+1. selects a vertex, $v$, which has the smallest $d_v$ among all the *unknown* vertices and declares that the shortest path from $s$ to $v$ is known. 
+2. updates the values of $d_w$. $d_w=d_v+c_{v,w}$. 
+
+the algorithm is the same for either directed graph or undirected graph.
 
 ```pseudocode
 for each v in Vertices
+{
     v.distance = ∞
     v.done = False
+}
 
 # The distance from the source vertex (s) to itself is 0
 source.dist = 0
 
 # Iterative algorithm:
-while some vertices remain not done:
+while(there is a vertex remains not done)
+{
     # Pick a vertex to work on:
     v = vertex that is not done with smallest distance
 	
-	for each edge in v.edges:
-		cost = edge.cost
-		n = edge.neighbour
-	
-		if n.distance < v.distance + cost
-			n.distance = v.distance + cost
-			n.path = v
-	
+	for each vertex w adjacent to v
+	{
+    	if(!w.done)
+    	{
+    	    cvw = cost of edge from v to w
+    		if(w.distance > v.distance + cvw)
+    		{
+    		    w.distance = v.distance + cvw
+                w.path = v
+    		}
+    	}
+	}
 	v.done = True
+}
 ```
+
+Program time complexity analysis:
+
+![unnamed](A:\MUN\Course\2020Spring\Data Structures\ENGI-4892-Data-Structure-and-Algorithms\Notes\figures\unnamed.jpg)
 
 
 
