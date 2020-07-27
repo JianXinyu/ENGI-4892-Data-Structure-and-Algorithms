@@ -1,3 +1,8 @@
+Problems:
+
+1. find a minimum spanning tree in an undirected graph. (for directed graph, more difficult) - greed
+2. Euler circuit
+
 # 1. Definition
 
 - A **graph** $G=(V,E)$ consists of a set of **vertices V** and a set of **edges E**. 
@@ -127,7 +132,7 @@ while q is not empty:
 
     for each n in adjacencies[v]:
         if distance[n] == ∞:
-            distance[n] = dist + 1
+            distance[n] = distance[v] + 1
             path[n] = v
             q.enqueue(n)
 ```
@@ -185,3 +190,128 @@ Program time complexity analysis:
 
 
 
+# 5. Minimum Spanning Tree
+
+ A **spanning tree** is a partial representation of a graph, which includes all of the vertices of the full graph but only just enough edges — in the shape of a tree — to be able to reach all of the vertices from a root vertex.
+
+- spanning tree: undirected graph is connected
+- spanning forest: unconnected, need to repeat the process  
+
+A **minimum spanning tree** of an undirected graph G is a tree formed from graph edges that connects all the vertices of G at lowest total cost. 
+
+The minimum spanning tree is:
+
+	- a tree because it is acyclic
+	- spanning because it covers every vertex
+	- minimum for the lowest total cost
+
+Properties:
+
+- minimum spanning tree exits if and only if G is connected.
+- $|E|=|V|-1$ in minimum spanning tree
+- it's usually not unique
+
+Two ways to construct minimum spanning tree: or spanning tree?
+
+1. Greedy ideas: as a spanning tree is created, the edge that is added is the one of minimum cost that avoids creation of a cycle, then the cost of the resulting spanning tree cannot be improved
+2. Depth-first search: we perform a depth-first search and, any time we find an edge an an as-yet-unvisited vertex, we add that edge and vertex to our spanning tree.
+
+## 5.1 Prim's Algorithm
+
+ essentially identical to Dijkstra’s algorithm, except that the definition of $d_v(distances)$ and its update rule are different. After a vertex $v$, is selected, for each unknown $w$ adjacent to $v$, $d_w = min(d_w, c_{v,w})$. 
+
+```pseudocode
+for each v in Vertices{
+    v.distance = ∞
+    v.done = False
+}
+source.dist = 0
+while(there is a vertex remains not done){
+    v = vertex that is not done with smallest distance
+	for each vertex w adjacent to v{
+    	if(!w.done){
+    	    cvw = cost of edge from v to w
+    		if(w.distance > cvw){
+    		    w.distance = cvw
+                w.path = v
+    		}
+    	}
+	}
+	v.done = True
+}
+```
+
+
+
+# 6. Applications of Depth-First Search
+
+DFS is a generalization of preorder traversal. Starting at some vertex $v$, we process $v$ and then **recursively** traverse all vertices adjacent to $v$.
+
+| Depth-First Search                                           | Breadth-First Search                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| recursively visit the neighbors of vertices such that we visit neighbors of one immediate neighbor before we visit the next immediate neighbor. | visit all of a vertex’s immediate neighbors before we visit any neighbors of neighbors |
+| looks like an preorder tree traversal                        | looks like expanding concentric rings, level-order tree traversal |
+
+Naive Algorithm:
+
+```pseudocode
+void dfs( Vertex v )
+{
+    v.visited = true;
+    for each Vertex w adjacent to v
+        if( !w.visited )
+            dfs( w );
+}
+```
+
+- To avoid cycles, a visited flag is used
+- implicitly assume that for undirected graphs every edge (v, w) appears
+  twice in the adjacency lists: once as (v, w) and once as (w, v).  
+- If the graph is undirected and not connected, or directed and not strongly connected, this strategy might fail to visit some nodes. 
+
+##### Time-complexity Analysis: $\Theta(|E|+|V|)$
+
+Prerequisite: use adjacency lists.
+
+1. - we only visit vertices that haven’t been visited before. 
+
+   - we mark the current vertex as visited *before* we have any opportunity for recursion. 
+
+     => Therefore, we can only ever visit $|V|$ vertices (at maximum).
+
+2.  in any connected graph, if we visit a vertex while there are $n$ unvisited vertices, that visitation will cause another $n−1$ visitations to occur.
+
+3. write a recurrence relation for the time it will take to complete a depth-first search. This time is on the order of 1 (for the marking of `v` as visited) plus the time to check out all of our neighbors. Inside this loop we see potentially many recursive depth-first search calls, but we’ve already said that we know what those add up to: the time it takes to visit $n−1$ additional vertices. What’s left of the loop is checking all of the vertex’s neighbors, which is on the order of the number of neighbors, which I’m calling $\Theta(|E_i|)$, where $i$ is the number of the current vertex. So, the total time to visit vertex $i$, with $|V|$ vertices remaining (including $i$), is $1+|E_0|+T(|V|−1)$. We can use the same equation to expand out $T(|V|−1)$ vertices, then $T(|V|−2)$, etc., until we end up with the sum of all of these 1s (one per vertex, for a total of $|V|$), plus the sum over all vertices of each vertex’s edge count, which is just the number of edges in the graph.
+   $$
+   T(|V|) = 1+|E_0|+T(|V|-1) 
+   \\= 1+|E_0|+|E_1|+T(|V|-2)
+   \\=|E|+|V|
+   $$
+
+## 6.1 spanning trees
+
+- depth-first spanning tree: undirected graph is connected
+- depth-first spanning forest: unconnected 
+
+##  6. 3 Euler Circuits
+
+- Euler path/Euler tour: find a path in the graph that visits every edge exactly once. is still possible if exactly two vertices have odd degree and we start at one of them and finish at the other. 
+- **Euler circuit**: find a cycle that visits every edge exactly once. is possible only if the graph is connected and each vertex has an even degree
+
+It turns out that the necessary condition is also sufficient. Any connected graph, all of whose vertices have even degree, must have an Euler circuit. 
+
+Steps to find an Euler circuit **using repeated depth-first search**:
+
+1.  pick a vertex (any vertex) and perform a depth-first search until we find an edge that leads back to where we started. This gives us a circuit. But there’s no guarantee that this circuit will go through all of the edges in the graph. 
+2. If there are untraversed edges in the graph, at least two of them will have to connect to a vertex that is part of our circuit. We can iterate along our circuit until we find a vertex with untraversed edges and perform another depth-first search. This will give another circuit, which can be spliced into the original.
+3. continue repeating this procedure until all of the edges have been traversed. 
+
+##### Time complexity analysis
+
+With the appropriate data structures, the running time of the algorithm is  **linear time**: $\Theta(|V|+|E|)$. 
+
+- To make splicing simple, the path should be maintained as a linked list. 
+- To avoid repetitious scanning of adjacency lists, we must maintain, for each adjacency list, a pointer to the last edge scanned. 
+- When a path is spliced in, the search for a new vertex from which to perform the next depth-first search must begin at the start of the splice point. 
+
+An analogous problem -- **Hamiltonian cycle problem** is to find a simple cycle, in an undirected graph, that visits every vertex. But it’s much harder than Euler circuit problem. 

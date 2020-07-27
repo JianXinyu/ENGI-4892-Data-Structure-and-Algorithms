@@ -119,3 +119,18 @@ Given the following table of road distances between selected locations on the Av
 2. Write a (template) function to calculate the shortest paths through an unweighted graph.
 
    see method shortestDistances() in graph.h
+
+## Exercises for 27 Jul 2020
+
+(see [acyclic graphs](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/acyclic-graphs/) and [centrality](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/centrality/))
+
+1. Write an algorithm for visiting graph vertices according to *topological order* (i.e., perform a *topological sort*). Show that its run-time complexity is Θ(|V|+|E|).
+2. (optional) Write a (template) function to calculate the betweenness centrality of a vertex in the graph, given an already-calculated matrix of shortest paths. Analyze the asymptotic complexity of your code.
+
+## Exercises for 29 Jul 2020
+
+(see: [depth-first search](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/depth-first/))
+
+1. Sketch out the pseudocode for finding an Euler circuit. Include an initial test of whether or not an Euler circuit will be found.
+2. What steps do you need to take to ensure that your algorithm can run in Θ(|V|+|E|) time?
+3. [optional] Write the C++ code to implement your Euler circuit discovery. Count the number of edges tested and `dfs()` calls — is the total actually Θ(|V|+|E|)?
