@@ -5,6 +5,8 @@
 #include <iostream>
 #include <iomanip> // std::setw
 #include <algorithm> // std::min_element
+#include <set>
+#include <queue>
 
 //! Exercises for 15 Jul 2020 Adjacency Matrix
 /*
@@ -152,7 +154,7 @@ public:
             VertexID v = minDistance(distances, done);
 
             // for each vertex w adjacent to v
-            for (VertexID w : neighbours(v))
+            for (VertexID w : adjacencies(v))
             {
                 if(!done[w])
                 {
@@ -184,7 +186,7 @@ public:
         const size_t N = vertices_.size();
         const size_t INF = std::numeric_limits<size_t>::max(); // the largest possible value for type size_t
         std::vector<size_t> distances(N, INF);
-        std::vector<VertexID> path(N);
+        std::vector<VertexID> path(N, -1);
         std::vector<bool> done(N, false);
 
         distances[source] = 0;
@@ -198,7 +200,7 @@ public:
                     continue;
                 }
 
-                for (VertexID n : neighbours(v))
+                for (VertexID n : adjacencies(v))
                 {
                     if (distances[n] == INF)
                     {
@@ -213,29 +215,26 @@ public:
 
         return distances;
     }
-    
+
 private:
   /**
-   * find all vertices adjacent to a vertex v
+   * a helper function to find all vertices adjacent to a vertex v
+   * note that adjacent relationship is directed
    * @param v
    * @return a vector contains the vertices adjacent to v
    */
-    std::vector<VertexID> neighbours(VertexID v)
+    std::vector<VertexID> adjacencies(VertexID v)
     {
-        std::vector<VertexID> neighbours;
+        std::vector<VertexID> adjacencies;
 
         for (const Edge &e : edges_)
         {
             if (e.from == v)
             {
-                neighbours.push_back(e.to);
+                adjacencies.push_back(e.to);
             }
-//             else if (e.to == v)
-//             {
-//                 neighbours.push_back(e.from);
-//             }
         }
-        return neighbours;
+        return adjacencies;
     };
 
     /**
@@ -260,7 +259,6 @@ private:
      */
     VertexID minDistance(std::vector<E> distances, std::vector<bool> done)
     {
-
         VertexID idx;
         // Initialize min value
         E min = std::numeric_limits<E>::max();
@@ -288,4 +286,70 @@ private:
     std::vector<Edge> edges_;
 };
 
+//! a class specially for unweighted shortest path problem
+template <typename V>
+class UnweightedGraph
+{
+public:
+    using VertexID = size_t;
+    VertexID addVertex(V value)
+    {
+        VertexID id = vertices_.size();
+        vertices_.push_back(std::move(value));
+        adjacencies_.emplace_back();
+
+        return id;
+    }
+
+    UnweightedGraph& addEdge(VertexID from, VertexID to)
+    {
+        adjacencies_[from].insert(to);
+        adjacencies_[to].insert(from);
+
+        return *this;
+    }
+
+    const V& operator[] (size_t index) const
+    {
+        return vertices_[index];
+    }
+
+    /*
+     * calculate the unweighted shortest path from a source
+     * vertex to all other vertices.
+     * using worklist algorithm.
+     */
+
+    std::vector<VertexID> shortestDistances(VertexID source)
+    {
+        int N = vertices_.size();
+        const size_t INF = std::numeric_limits<size_t>::max();
+        std::vector<size_t> distances(N, INF);
+        std::vector<VertexID> path(N, -1);
+        std::queue<VertexID> worklist;
+
+        distances[source] = 0;
+        worklist.push(source);
+
+        while (not worklist.empty())
+        {
+            VertexID v = worklist.front();
+            worklist.pop();
+
+            for (VertexID n : adjacencies_[v])
+            {
+                if(distances[n] == INF)
+                {
+                    distances[n] = distances[v] + 1;
+                    path[n] = v;
+                    worklist.push(n);
+                }
+            }
+        }
+        return distances;
+    }
+private:
+    std::vector<V> vertices_;
+    std::vector<std::set< VertexID >> adjacencies_;
+};
 #endif //GRAPH_GRAPH_H

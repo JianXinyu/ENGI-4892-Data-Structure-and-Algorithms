@@ -143,3 +143,12 @@ Insert an ***inner*** node, that is, the right child of a left node or the left 
 
 the **complexity** of performing this double-rebalancing in terms of the number of nodes in the tree:
 
+# 8. Sets and Maps in the Standard Library
+
+The STL containers vector and list are inefficient for searching.
+
+Set and map, two other STL containers, guarantee logarithmic cost for insertion, deletion and searching. 
+
+## Sets
+
+A **set** is an ordered container that doesn't allow duplicates
