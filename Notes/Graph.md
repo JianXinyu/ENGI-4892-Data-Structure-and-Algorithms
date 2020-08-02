@@ -73,9 +73,25 @@ How to represent graph using adjacency list?
 
 # 2. Topological Sort
 
-an ordering of vertices in a DAG, such that if there is a path from $v_i$ to $v_j$, then $v_j$ appears after $v_i$ in the ordering. It contains all vertices. Perhaps there is no path between two vertices, it's OK as long as they fulfill the ordering requirement to other vertices. Thus, it makes the topological sort not unique. or example, in the following DAG, v1, v2, v5, v4, v3, v7, v6 and v1, v2, v5, v4, v7, v3, v6 are both topological orderings. Although there is no path from v3 to v7.
+A **topological sort** is an ordering of vertices in a DAG, such that if there is a path from $v_i$ to $v_j$, then $v_j$ appears after $v_i$ in the ordering. It contains all vertices. Perhaps there is no path between two vertices, it's OK as long as they fulfill the ordering requirement to other vertices. Thus, it makes the topological sort not unique. or example, in the following DAG, v1, v2, v5, v4, v3, v7, v6 and v1, v2, v5, v4, v7, v3, v6 are both topological orderings. Although there is no path from v3 to v7.
 
 ![image-20200724221551375](.\figures\DAG)
+
+Topological sort isn't possible if the graph has a cycle.
+
+How to find topological sort?
+
+1.  find any vertex without  incoming edges.
+2. print this vertex and remove it, along with its edges, from the graph.
+3. apply the same strategy with the rest graph.
+
+asymptotic run-time complexity: 
+
+1. Normal situation: $\Theta(|V|^2)$
+
+2. Using stack or queue: $\Theta(|E|+|V|)$
+
+   
 
 # 3. Shortest-Path Algorithms
 
@@ -186,9 +202,16 @@ while(there is a vertex remains not done)
 
 Program time complexity analysis:
 
+Depending on data structure used:
+
+- normal ADT, such as vector: $\Theta(|V|^2)$
+- AVL, priority heap: $\Theta((|V|+|E|)log|V|)$
+
 ![unnamed](A:\MUN\Course\2020Spring\Data Structures\ENGI-4892-Data-Structure-and-Algorithms\Notes\figures\unnamed.jpg)
 
+## 3.4 Acyclic Graphs
 
+Now we can improve Dijkstra's algorithm by changing the order in which vertices are declared *known*, otherwise known as the vertex selection rule.
 
 # 5. Minimum Spanning Tree
 
@@ -315,3 +338,9 @@ With the appropriate data structures, the running time of the algorithm is  **li
 - When a path is spliced in, the search for a new vertex from which to perform the next depth-first search must begin at the start of the splice point. 
 
 An analogous problem -- **Hamiltonian cycle problem** is to find a simple cycle, in an undirected graph, that visits every vertex. But it’s much harder than Euler circuit problem. 
+
+
+
+
+
+cost 

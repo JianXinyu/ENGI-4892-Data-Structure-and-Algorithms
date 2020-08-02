@@ -152,3 +152,25 @@ Set and map, two other STL containers, guarantee logarithmic cost for insertion,
 ## Sets
 
 A **set** is an ordered container that doesn't allow duplicates
+
+### Maps
+
+```c++
+#include <memory>
+template <typename K, typename V>
+class Map
+{
+private:
+	struct Entry
+	{
+		K key;
+		V value;
+	};
+	BinarySearchTree<Entry, ComparatorBasedOnKey> map;
+}
+```
+
+
+
+
+
