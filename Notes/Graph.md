@@ -15,7 +15,13 @@ Problems:
 
 - A **cycle** in a directed graph is a path of length at least 1 such that $w_1=w_N$. **simple cycle** if it's a simple path.  For undirected graph, the edges should be distinct. e.g., path $u,v,u$ in an undirected graph isn't a cycle, but it's a cycle in a directed graph.  
   - **Acyclic**: a directed graph has no cycles.
+  
   - **DAG**: directed acyclic graph
+  
+    Problems that cycle causes:
+  
+    - the longest-path problem:  positive-cost cycles
+    - the shortest-path problem: negative-cost cycles
   
 - **degree**: the number of edges that a vertex touches.
 
@@ -71,6 +77,29 @@ How to represent graph using adjacency list?
   - map: keys are vertices and values are adjacency list. Simpler
   - class: maintain each adjacency list as a data member of a Vertex class. Faster
 
+####  How to measure the importance of a vertex?
+
+1. Degree: not informative
+
+2. **Betweenness centrality**: a measure of how many of the shortest paths through a graph flow through a particular vertex.
+   $$
+   C_B(v)=\sum_{s\neq w\neq t \in V}\frac{\sigma_{st}(v)}{\sigma_{st}}
+   $$
+   the ratio of the number of shortest paths in the graph, from all possible starting and ending points, that flow through vertex $v$, to the number of all shortest paths through the graph.
+
+   Time Analysis:  The cost of computing betweenness centrality is dominated by the cost of calculating the shortest paths from all vertices to all other vertices.
+
+   - dense graph: the Floyd–Warshall algorithm can find all such shortest paths in $\Theta(|V|^3)$ time.
+   - sparse graph: Johnson’s algorithm do something like running Dijkstra’s algorithm $|V|$ times.
+   -  If the graph is unweighted, Brandes' algorithm can compute all shortest paths in just $\Theta(|V||E|)$ time.
+
+3. **Eigenvalue centrality**: model the *influence* of vertices within a graph.
+
+   Application:
+
+   1.  *social network analysis*: Degree and betweenness centrality are critical to *social network analysis*, the study of how people in groups interact with each other at a *systemic* — rather than individual — level. 
+   2. *influence modeling*: eigenvector centrality algorithms are important for assessing the importance of linked knowledge artifacts like scientific papers and even Web pages. Google’s PageRank algorithm is a modified version of eigenvector centrality.
+
 # 2. Topological Sort
 
 A **topological sort** is an ordering of vertices in a DAG, such that if there is a path from $v_i$ to $v_j$, then $v_j$ appears after $v_i$ in the ordering. It contains all vertices. Perhaps there is no path between two vertices, it's OK as long as they fulfill the ordering requirement to other vertices. Thus, it makes the topological sort not unique. or example, in the following DAG, v1, v2, v5, v4, v3, v7, v6 and v1, v2, v5, v4, v7, v3, v6 are both topological orderings. Although there is no path from v3 to v7.
@@ -91,6 +120,33 @@ asymptotic run-time complexity:
 
 2. Using stack or queue: $\Theta(|E|+|V|)$
 
+   ```pseudocode
+   Queue<Vertex> q;
+   int counter = 0;
+   
+   q.makeEmpty();
+   # this for loop has run-time complexity Θ(|V|)
+   for each Vertex v
+   	if(v.indegree == 0)
+   		q.enqueue(v);
+   		
+   while(!q.isEmpty())
+   {
+   	Vertex v = q.dequeue();
+   	v.topNum = ++counter;
+   	# this for loop is executed at most once per edge
+   	# thus it has run-time complexity Θ(|E|)
+   	for each Vertex w adjacent to v
+   		if(--w.indegree == 0)
+   			q.enqueue(w);
+   }
+   
+   if(counter != NUM_VERTICES)
+   	throw CycleFoundException();
+   ```
+   
+   
+   
    
 
 # 3. Shortest-Path Algorithms
@@ -212,6 +268,28 @@ Depending on data structure used:
 ## 3.4 Acyclic Graphs
 
 Now we can improve Dijkstra's algorithm by changing the order in which vertices are declared *known*, otherwise known as the vertex selection rule.
+
+The new rule is to select the vertex in topological order. when a vertex $v$ is selected, its distance, $d_v$, can
+no longer be lowered, since by the topological ordering rule it has no incoming edges emanating from unknown nodes.
+
+Running-time: $\Theta(|E+|V|)$
+
+Applications:
+
+1. model some downhill skiing problem
+
+2. model of (nonreversible) chemical reactions
+
+3. **critical path analysis**
+
+   - activity-node graph 
+   - event-node graph
+     - Dummy edges and nodes
+     - earliest completion time for the project
+       - earliest completion time for the node
+       - the latest time
+       - slack time
+       - critical path
 
 # 5. Minimum Spanning Tree
 
