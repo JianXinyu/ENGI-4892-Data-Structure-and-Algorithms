@@ -216,11 +216,6 @@ public:
         return distances;
     }
 
-    float bcentrality()
-    {
-
-    }
-
 private:
   /**
    * a helper function to find all vertices adjacent to a vertex v
