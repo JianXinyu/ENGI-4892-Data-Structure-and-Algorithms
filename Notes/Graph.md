@@ -85,13 +85,13 @@ How to represent graph using adjacency list?
    $$
    C_B(v)=\sum_{s\neq w\neq t \in V}\frac{\sigma_{st}(v)}{\sigma_{st}}
    $$
-   the ratio of the number of shortest paths in the graph, from all possible starting and ending points, that flow through vertex $v$, to the number of all shortest paths through the graph.
+   where $\sigma_{st}$ is the total number of shortest paths from node $s$ to node $t$, $\sigma_{st}(v)$ is the number of those paths that pass through $v$.
 
    Time Analysis:  The cost of computing betweenness centrality is dominated by the cost of calculating the shortest paths from all vertices to all other vertices.
 
    - dense graph: the Floyd–Warshall algorithm can find all such shortest paths in $\Theta(|V|^3)$ time.
-   - sparse graph: Johnson’s algorithm do something like running Dijkstra’s algorithm $|V|$ times.
-   -  If the graph is unweighted, Brandes' algorithm can compute all shortest paths in just $\Theta(|V||E|)$ time.
+   - sparse graph: Johnson’s algorithm do something like running Dijkstra’s algorithm $|V|$ times. $O(|V|^2log|V|+|V||E|)$ 
+   -  If the graph is unweighted, Brandes' algorithm can compute all shortest paths in just $O(|V||E|)$ time.
 
 3. **Eigenvalue centrality**: model the *influence* of vertices within a graph.
 
@@ -407,6 +407,21 @@ Steps to find an Euler circuit **using repeated depth-first search**:
 2. If there are untraversed edges in the graph, at least two of them will have to connect to a vertex that is part of our circuit. We can iterate along our circuit until we find a vertex with untraversed edges and perform another depth-first search. This will give another circuit, which can be spliced into the original.
 3. continue repeating this procedure until all of the edges have been traversed. 
 
+```pseudocode
+# check if the graph is connected and each vertex has an even degree
+if(connected() and even_degree())
+{
+	v = random(); # pick any vertex to start
+	circuit = dfs(v); # perform a depth-first search
+	while(there is untraversed edge)
+	{
+		w = find_vertex(circuit);# search the circuit to find a vertex with untraversed edges
+		circuit_new = dfs(w);#perform another depth-first search
+		circuit = splice(circuit_new, circuit);#splice new circuit into the original one
+	}
+}
+```
+
 ##### Time complexity analysis
 
 With the appropriate data structures, the running time of the algorithm is  **linear time**: $\Theta(|V|+|E|)$. 
@@ -416,9 +431,3 @@ With the appropriate data structures, the running time of the algorithm is  **li
 - When a path is spliced in, the search for a new vertex from which to perform the next depth-first search must begin at the start of the splice point. 
 
 An analogous problem -- **Hamiltonian cycle problem** is to find a simple cycle, in an undirected graph, that visits every vertex. But it’s much harder than Euler circuit problem. 
-
-
-
-
-
-cost 

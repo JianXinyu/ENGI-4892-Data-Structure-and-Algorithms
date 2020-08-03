@@ -1,6 +1,7 @@
 #include <iostream>
 #include "graph.h"
 #include "parse_csv.h"
+#include "bcentrality.h"
 
 //! Reload operator << to print std::vector type data
 template <typename T>
@@ -58,7 +59,7 @@ int main() {
 //    std::cout << " ]\n";
 
     //! test code for work list algorithm
-    UnweightedGraph<std::string> cities;
+  /*  UnweightedGraph<std::string> cities;
     const auto StJohns = cities.addVertex("St. John's");
     const auto Gander = cities.addVertex("Gander");
     const auto DeerLake = cities.addVertex("Deer Lake");
@@ -89,6 +90,23 @@ int main() {
                 << "  It takes " << distances[i]
                 << " flights to get to " << cities[i]
                 << "\n";
-    }
+    }*/
+
+    //! ExerciseS for 27 Jul 2020 betweenness centrality
+    bcGraph<std::string, float> g;
+    g.addVertex("A");
+    g.addVertex("B");
+    g.addVertex("C");
+    g.addVertex("D");
+    g.addEdge(0,1, 1.0);
+    g.addEdge(1,2, 2.0);
+    g.addEdge(2,3,3.0);
+    g.addEdge(0,3,2.0);
+    g.addEdge(1,3,4.0);
+
+    // betweenness centrality of vertex B(1) should be 1
+    int bcentrality = g.betweenness_centrality(1);
+    std::cout << bcentrality;
+
     return 0;
 }

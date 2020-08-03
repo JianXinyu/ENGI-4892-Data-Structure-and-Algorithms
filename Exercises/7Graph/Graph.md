@@ -125,12 +125,81 @@ Given the following table of road distances between selected locations on the Av
 (see [acyclic graphs](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/acyclic-graphs/) and [centrality](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/centrality/))
 
 1. Write an algorithm for visiting graph vertices according to *topological order* (i.e., perform a *topological sort*). Show that its run-time complexity is Θ(|V|+|E|).
+
+   ```pseudocode
+   Queue<Vertex> q;
+   int counter = 0;
+   
+   q.makeEmpty();
+   # this for loop has run-time complexity Θ(|V|)
+   for each Vertex v
+   	if(v.indegree == 0)
+   		q.enqueue(v);
+   		
+   while(!q.isEmpty())
+   {
+   	Vertex v = q.dequeue();
+   	v.topNum = ++counter;
+   	# this for loop is executed at most once per edge
+   	# thus it has run-time complexity Θ(|E|)
+   	for each Vertex w adjacent to v
+   		if(--w.indegree == 0)
+   			q.enqueue(w);
+   }
+   
+   if(counter != NUM_VERTICES)
+   	throw CycleFoundException();
+   ```
+
+   From the analysis in the pseudocode, the run-time complexity is Θ(|V|+|E|)
+
 2. (optional) Write a (template) function to calculate the betweenness centrality of a vertex in the graph, given an already-calculated matrix of shortest paths. Analyze the asymptotic complexity of your code.
+
+   ```c++
+   int betweenness_centrality(VertexID interest)
+       {
+           std::vector<E> tmp; // temporary vector to store the shortest distances from a vertex to other vertices
+           int count = 0; // count of how many shortest path
+           // iterate to calculate shortest path for every vertex
+           for(VertexID id = 0; id < vertices_.size(); id++)
+           {
+               tmp = Dijkstra(id, interest);
+           }
+           return vertices_[interest].count;
+       }
+   ```
+
+   Apparently, this algorithm iterates Dijkstra's algorithm |V| times. Since the time complexity of Dijkstra's algorithm is $\Theta(|V|^2)$, the asymptotic complexity is $O(|V|^3)$.
 
 ## Exercises for 29 Jul 2020
 
 (see: [depth-first search](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/modules/graphs/depth-first/))
 
 1. Sketch out the pseudocode for finding an Euler circuit. Include an initial test of whether or not an Euler circuit will be found.
+
+   ```pseudocode
+   # check if the graph is connected and each vertex has an even degree
+   if(connected() and even_degree())
+   {
+   	v = random(); # pick any vertex to start
+   	circuit = dfs(v); # perform a depth-first search
+   	while(there is untraversed edge)
+   	{
+   		w = find_vertex(circuit);# search the circuit to find a vertex with untraversed edges
+   		circuit_new = dfs(w);#perform another depth-first search
+   		circuit = splice(circuit_new, circuit);#splice new circuit into the original one
+   	}
+   }
+   ```
+
 2. What steps do you need to take to ensure that your algorithm can run in Θ(|V|+|E|) time?
+
+   With the appropriate data structures, the running time of the algorithm is  **linear time**: $\Theta(|V|+|E|)$. 
+
+   - To make splicing simple, the path should be maintained as a linked list. 
+   - To avoid repetitious scanning of adjacency lists, we must maintain, for each adjacency list, a pointer to the last edge scanned. 
+   - When a path is spliced in, the search for a new vertex from which to perform the next depth-first search must begin at the start of the splice point. 
+
 3. [optional] Write the C++ code to implement your Euler circuit discovery. Count the number of edges tested and `dfs()` calls — is the total actually Θ(|V|+|E|)?
+
+   didn't finish this problem.
