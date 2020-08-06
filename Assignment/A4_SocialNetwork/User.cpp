@@ -1,7 +1,5 @@
 #include "User.h"
 
-#include <utility>
-
 User::User(User::ID id, std::string name)
         : id_(id), name_(std::move(name))
 {
@@ -15,6 +13,12 @@ User::User()
 User::ID User::id() const
 {
     return id_;
+}
+
+//! what is the user's name?
+std::string User::name() const
+{
+    return name_;
 }
 
 //! How many friends does this user have?
@@ -67,6 +71,11 @@ void User::addFriend(const User& other)
     friends_.push_back(std::make_shared<User>(other));
 }
 
+void User::addFriendPtr(std::shared_ptr<User> other)
+{
+    friends_.push_back(other);
+}
+
 User::FriendIterator::FriendIterator(int id, std::shared_ptr<User> user)
         : frdIdx_(id), currentUser_(std::move(user))
 {
@@ -74,26 +83,29 @@ User::FriendIterator::FriendIterator(int id, std::shared_ptr<User> user)
 
 User& User::FriendIterator::operator*()
 {
-    return *currentUser_;
+    return *currentUser_->friends_[frdIdx_];
 }
 
 User::FriendIterator User::FriendIterator::operator ++ (int)
 {
-    if(frdIdx_++ < currentUser_->friends_.size())
+    FriendIterator old = *this;
+    if(++frdIdx_ >= currentUser_->friends_.size())
         currentUser_ = nullptr;
-    return *this;
+    return old;
 }
 
 bool User::FriendIterator::operator == (const User::FriendIterator& other) const
 {
-//    if(other.currentUser_ == nullptr)
-//        return currentUser_ ? false : true;
-    return currentUser_ == other.currentUser_;
+    if(other.currentUser_ == nullptr)
+        return currentUser_ ? false : true;
+    return (currentUser_.get() == other.currentUser_.get()) && (frdIdx_ == other.frdIdx_);
 }
 
 bool User::FriendIterator::operator != (const User::FriendIterator& other) const
 {
-    return currentUser_ != other.currentUser_;
+    if(other.currentUser_ == nullptr)
+        return currentUser_ ? true : false;
+    return (currentUser_.get() != other.currentUser_.get()) || (frdIdx_ != other.frdIdx_);
 }
 
 //! Get an iterator that will iterate over this User's friends
@@ -124,8 +136,9 @@ User::FriendIterator User::friendsOfFriends() const
         // Second, add all friend of the above friend into fof.friends_
         for(const auto& subFrd : frd->friends_)
         {
-            // if subFrd wasn't added before, add it
-            if(std::find(rcd.begin(), rcd.end(), subFrd->id_) != rcd.end())
+            // if subFrd wasn't added before and subFrd isn't self, add it
+            if(std::find(rcd.begin(), rcd.end(), subFrd->id_) == rcd.end()
+                && subFrd->id_!=id_)
             {
                 fof.addFriend(*subFrd);
                 rcd.push_back(subFrd->id_);

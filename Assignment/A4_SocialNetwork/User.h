@@ -38,6 +38,9 @@ public:
     //! What is this user's ID?
     ID id() const;
 
+    //! what is the user's name?
+    std::string name() const;
+
     //! How many friends does this user have?
     size_t degree() const;
 
@@ -51,6 +54,9 @@ public:
 
     //! Make this User friends with another User.
     void addFriend(const User&);
+
+    //! Make this User friends with another User.
+    void addFriendPtr(std::shared_ptr<User>);
 
     //! An iterator that can iterate over all of a User's friends
     struct FriendIterator
@@ -84,7 +90,7 @@ public:
     FriendIterator end() const;
 
 private:
-    ID id_;
+    ID id_{};
     std::string name_;
     std::vector<std::shared_ptr<User>> friends_;
 

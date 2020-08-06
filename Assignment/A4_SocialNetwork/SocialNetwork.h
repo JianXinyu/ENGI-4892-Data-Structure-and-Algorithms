@@ -18,14 +18,14 @@
 #define SOCIAL_NETWORK_H_
 
 #include "User.h"
-
-
 /**
  * A (rather crude!) representation of a social network.
  */
 class SocialNetwork
 {
 public:
+    SocialNetwork();
+
     //! Add a new user to the social network.
     User::ID addUser(std::string name);
 
@@ -42,23 +42,28 @@ public:
     //! An iterator over users in the social network
     struct Iterator
     {
+        Iterator(User::ID id, std::shared_ptr<SocialNetwork> network);
         User& operator*();
         Iterator operator ++ (int);
 
         bool operator == (const Iterator&) const;
         bool operator != (const Iterator&) const;
+
+        User::ID currentIdx_;
+        std::shared_ptr<SocialNetwork> currentNet_;
     };
 
     //! Get an iterator over all users in the network.
     Iterator begin();
 
     //! Find all users in the network whose names start with `name`.
-    Iterator find(std::string name);
+    Iterator find(const std::string& name);
 
     //! Get an iterator that signifies the end of any user iteration.
     Iterator end();
 
-
+private:
+    std::vector<std::shared_ptr<User>> users_;
 };
 
 #endif
