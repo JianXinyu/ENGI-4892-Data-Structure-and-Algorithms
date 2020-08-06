@@ -1,0 +1,5 @@
+Write C++ code to model a social network.
+
+In this assignment, you must implement the (non-template!) classes declared in [User.h](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/assignment/4/User.h) and [SocialNetwork.h](https://memorialu.gitlab.io/Engineering/ECE/Teaching/data-structures/website/assignment/4/SocialNetwork.h). You should add whatever information you require to the classes in order to achieve the required functionality and implement the required methods in corresponding C++ source files (i.e., `User.cpp` and `SocialNetwork.cpp`).
+
+Please note that there is a fair amount of implementation freedom here: you can choose to implement your graph in a number of ways that would be correct. For example, some data could be stored in `User` objects or in the `SocialNetwork` object; either can be implemented correctly.
