@@ -39,3 +39,7 @@ Solution:
 
  2. **probing**
 
+## Perfect Hash
+
+Prerequist: **we know all possible keys in advance**
+
