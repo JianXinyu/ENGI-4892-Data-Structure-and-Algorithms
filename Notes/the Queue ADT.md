@@ -2,7 +2,7 @@
 
 ### Postfix Expressions
 
-我们正常使用的数学计算式成为中缀表达式(infix expression)，比如 $1+2+3*4$ 。常见的科学计算器计算的结果都是15，因为考虑了运算优先级，相当于自动加上了括号。但是早期简单的计算器只会按顺序无脑计算，计算结果变成24。所以我们应想办法用顺序的表达式来实现这样的计算(evaluate)顺序：计算1+2的和记为A1，计算3*4记为A2，将A1+A2，最后将其和存在A1。据此我们将表达式写为：$1 \quad 2 + 3 \quad 4 * +$ 。 这种表达式成为后缀表达式(postfix expression)，又称为Reverse Polish Notation(RPN)。
+我们正常使用的数学计算式成为中缀表达式(infix expression)，比如 $1+2+3*4$ 。常见的科学计算器计算的结果都是15，因为考虑了运算优先级，相当于自动加上了括号。但是早期简单的计算器只会按顺序无脑计算，计算结果变成24。所以我们应想办法用顺序的表达式来实现这样的计算(evaluate)顺序：计算1+2的和记为A1，计算3*4记为A2，将A1+A2，最后将其和存在A1。据此我们将表达式写为：$1 \quad 2 + \quad 3 \quad 4 * +$ 。 这种表达式成为后缀表达式(postfix expression)，又称为Reverse Polish Notation(RPN)。
 
 用Stack最容易evaluate RPN:
 

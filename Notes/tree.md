@@ -129,15 +129,19 @@ Insert an ***inner*** node, that is, the right child of a left node or the left 
 
 ![image-20200711110113460](.\figures\image-20200711110113460.png)
 
+If we follow the single rotation rules, we will end up grafting the new node onto a node (which used to be the pre-rotation subtree root) at the same depth in the subtree. A left-right node becomes a right-left node, but it remains an inner node at the same depth!
+
+![drsr](A:\MUN\Course\2020Spring\Data Structures\ENGI-4892-Data-Structure-and-Algorithms\Notes\figures\class.md)
+
 1. arrange for the subtree to be too deep in an outer node rather than an inner one through rotation.
 
    in this case, left rotation
 
-   ![image-20200711110207139](.\figures\image-20200711110207139.png)
+   
 
 2. rotate. in this case, right rotation
 
-   ![image-20200711110421013](.\figures\image-20200711110421013.png)
+   
 
 
 
